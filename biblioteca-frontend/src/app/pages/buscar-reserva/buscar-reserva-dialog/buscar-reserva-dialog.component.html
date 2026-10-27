@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Detalle de Reserva</h2>
+<mat-dialog-content>
+  <p><strong>Cliente:</strong> {{data.cliente?.nombres}} {{data.cliente?.apellidos}}</p>
+  <p><strong>Cédula:</strong> {{data.cliente?.cedula}}</p>
+  <p><strong>Fecha:</strong> {{data.fechaReserva | date:'dd/MM/yyyy HH:mm'}}</p>
+  <h4>Libros</h4>
+  <mat-list>
+    @for (libro of libros(); track libro.idLibro) {
+      <mat-list-item>
+        <span matListItemTitle>{{libro.titulo}}</span>
+        <span matListItemLine>{{libro.autor}} - ISBN: {{libro.isbn}}</span>
+      </mat-list-item>
+    }
+  </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cerrar</button>
+</mat-dialog-actions>

@@ -1,0 +1,49 @@
+<mat-dialog-content>
+    <mat-toolbar>
+        <span>INFORMACION DEL LIBRO</span>
+    </mat-toolbar>
+
+    <form [formRoot]="libroForm.form" (submit)="operate()">
+
+        <mat-form-field>
+            <mat-label>Categoria</mat-label>
+            <mat-select [formField]="libroForm.form.idCategoria">
+                @for (cat of $categorias(); track $index) {
+                    <mat-option [value]="cat.idCategoria">{{ cat.nombre }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>TITULO</mat-label>
+            <input matInput placeholder="titulo" [formField]="libroForm.form.titulo" />
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>AUTOR</mat-label>
+            <input matInput placeholder="autor" [formField]="libroForm.form.autor" />
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>ISBN</mat-label>
+            <input matInput placeholder="isbc" [formField]="libroForm.form.isbn" />
+        </mat-form-field>
+
+        <mat-dialog-actions align="center">
+        
+            <button mat-flat-button type="submit" [disabled]="libroForm.isInvalid()">
+                <span>OK</span>
+                <mat-icon>done</mat-icon>
+            </button>
+            <button mat-flat-button type="button" class="cancel-button" (click)="close()">
+                <span>CANCELAR</span>
+                <mat-icon>cancel</mat-icon>
+            </button>
+       </mat-dialog-actions>
+
+
+          
+    </form>
+
+</mat-dialog-content>
+

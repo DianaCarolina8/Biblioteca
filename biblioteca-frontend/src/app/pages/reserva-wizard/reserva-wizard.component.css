@@ -1,0 +1,42 @@
+.step-content {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.libros-card {
+  margin-bottom: 16px;
+}
+
+.no-books {
+  color: #666;
+  text-align: center;
+  padding: 20px;
+}
+
+.step-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.summary-section {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.summary-section h3 {
+  color: #1976d2;
+  margin-bottom: 8px;
+}
+
+.summary-section p {
+  margin: 4px 0;
+}

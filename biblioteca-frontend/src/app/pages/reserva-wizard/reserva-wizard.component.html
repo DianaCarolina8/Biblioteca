@@ -1,0 +1,112 @@
+<mat-stepper linear #stepper>
+  <mat-step  label="Datos de Reserva">
+    <form [formRoot]="reservaWizardForm.form">
+      <div class="step-content">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Cliente</mat-label>
+          <mat-select [formField]="reservaWizardForm.form.cliente">
+            @for (cliente of clientes; track cliente.idCliente) {
+              <mat-option [value]="cliente">
+                {{ cliente.nombres }} {{ cliente.apellidos }} - {{ cliente.cedula }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Fecha de Reserva</mat-label>
+          <input matInput [matDatepicker]="picker" [min]="today" [formField]="reservaWizardForm.form.fechaReserva">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Buscar Libro</mat-label>
+          <input type="text" 
+                 matInput 
+                 [matAutocomplete]="auto"
+                 [value]="libroSearchCtrl()"
+                 (input)="onLibroSearchChange($any($event.target).value)">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="agregarLibro($event.option.value)">
+            @for (libro of filteredLibros$ | async; track libro.idLibro) {
+              <mat-option [value]="libro">
+                {{ libro.titulo }} - {{ libro.autor }}
+              </mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-card class="libros-card">
+          <mat-card-header>
+            <mat-card-title>Libros Seleccionados</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if ($librosSeleccionados().length === 0) {
+              <p class="no-books">No hay libros seleccionados</p>
+            } @else {
+              <mat-list>
+                @for (libro of $librosSeleccionados(); track libro.idLibro) {
+                  <mat-list-item>
+                    <span matListItemTitle>{{ libro.titulo }}</span>
+                    <span matListItemLine>{{ libro.autor }}</span>
+                    <button mat-icon-button matListItemMeta (click)="quitarLibro(libro.idLibro)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </mat-list-item>
+                }
+              </mat-list>
+            }
+          </mat-card-content>
+        </mat-card>
+
+        <div class="step-actions">
+          <button mat-raised-button color="primary" matStepperNext [disabled]="reservaWizardForm.isInvalid() || $librosSeleccionados().length === 0">
+            Siguiente
+          </button>
+        </div>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step label="Revisión y Confirmación">
+    <div class="step-content">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Resumen de Reserva</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="summary-section">
+            <h3>Cliente</h3>
+            <p>{{ reservaWizardForm.value().cliente?.nombres }} {{ reservaWizardForm.value().cliente?.apellidos }}</p>
+            <p><strong>Cédula:</strong> {{ reservaWizardForm.value().cliente?.cedula }}</p>
+            <p><strong>Email:</strong> {{ reservaWizardForm.value().cliente?.email }}</p>
+          </div>
+
+          <div class="summary-section">
+            <h3>Fecha de Reserva</h3>
+            <p>{{ reservaWizardForm.value().fechaReserva | date:'dd/MM/yyyy' }}</p>
+          </div>
+
+          <div class="summary-section">
+            <h3>Libros Seleccionados ({{ $librosSeleccionados().length }})</h3>
+            <mat-list>
+              @for (libro of $librosSeleccionados(); track libro.idLibro) {
+                <mat-list-item>
+                  <span matListItemTitle>{{ libro.titulo }}</span>
+                  <span matListItemLine>{{ libro.autor }} - ISBN: {{ libro.isbn }}</span>
+                </mat-list-item>
+              }
+            </mat-list>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <div class="step-actions">
+        <button mat-button matStepperPrevious>Anterior</button>
+        <button mat-raised-button color="primary" (click)="guardar()" [disabled]="reservaWizardForm.isInvalid() || $librosSeleccionados().length === 0">
+          Guardar Reserva
+        </button>
+      </div>
+    </div>
+  </mat-step>
+</mat-stepper>

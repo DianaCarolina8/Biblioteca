@@ -1,0 +1,66 @@
+<mat-tab-group (selectedIndexChange)="onTabChange($event)">
+  <mat-tab label="Buscar por Cliente">
+    <div class="tab-content">
+      <form [formRoot]="buscarReservaForm.$form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Cédula</mat-label>
+          <input matInput [formField]="buscarReservaForm.$form.cedula" placeholder="Ingrese cédula">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombres/Apellidos</mat-label>
+          <input matInput [formField]="buscarReservaForm.$form.nombres" placeholder="Ingrese nombres o apellidos">
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="buscar()">Buscar</button>
+      </form>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Buscar por Fechas">
+    <div class="tab-content">
+      <form [formRoot]="buscarReservaForm.$form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Fecha Inicio</mat-label>
+          <input matInput [matDatepicker]="picker1" [formField]="buscarReservaForm.$form.fecha1">
+          <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Fecha Fin</mat-label>
+          <input matInput [matDatepicker]="picker2" [formField]="buscarReservaForm.$form.fecha2">
+          <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="buscar()">Buscar</button>
+      </form>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+<div class="results-table">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="cliente">
+      <th mat-header-cell *matHeaderCellDef> Cliente </th>
+      <td mat-cell *matCellDef="let row"> {{row.cliente?.nombres}} {{row.cliente?.apellidos}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaReserva">
+      <th mat-header-cell *matHeaderCellDef> Fecha Reserva </th>
+      <td mat-cell *matCellDef="let row"> {{row.fechaReserva | date:'dd/MM/yyyy HH:mm'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-button color="primary" (click)="verDetalles(row)">Ver Detalles</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
